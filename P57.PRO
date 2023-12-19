@@ -1,0 +1,31 @@
+domains
+    queen=q(integer,integer)
+    queens=queen*
+    freelist = integer*
+    board=board(queens,freelist,freelist,freelist,freelist)
+predicates
+    placeN(integer,board,board)
+    place_a_queen(integer,board,board)
+    nqueens(integer)
+    makelist(integer,freelist)
+    findandremove(integer,freelist,freelist)
+clauses
+    nqueens(N):-
+        rnakelist(N,L),Diagonal=N*2-1,makelist(Diagonal,LL),
+        placeN(N,board([],L,L,LL,LL),Final),write(Final).
+    placeN(_,board(D,[],[],D1,D2),board(D,[],[],D1,D2)):-!.
+    placeN(N,Board1,Result):-
+        place_a_queen(N,Board1,Board2),
+        placeN(N,Board2,Result).
+    place_a_queen(N,board(Queens,Rows,Columns,Diag1,Diag2),
+        board([q(R,C)IQueens],NewR,NewC,NewD1,NewD2)):-
+            findandremove(R,Rows,NewR),
+            findandrernove(C,Colurnns,NewC),
+            D1=N+C-R,findandrernove(D1,Diag1,NewD1),
+            D2=R+C-1,findandrernove(D2,Diag2,NewD2).
+    findandremove(X,[XIRest],Rest).
+    findandrernove(X,[YIRest],[YITail]):-
+        findandrernove(X,Rest,Tail).
+    rnakelist(1,[1]).
+    rnakelist(N,[N:Rest]):-
+        N>O,N1=N-1,rnakelist(N1,Rest).
